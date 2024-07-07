@@ -11,7 +11,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 const dbUrl = process.env.MONGODB_URL;
 
-// connect to MongoDB
+// Connect to MongoDB
 connectDB(dbUrl);
 
 // middleware
@@ -23,13 +23,11 @@ let corsOptions = {
 } 
 app.use(cors(corsOptions));
 
-app.get('/', (req, res) => {
-  res.send('Hello, Express running....');
-});
+
 
 // routers
 app.use("/api/product", productRouter);
 
-app.listen(port, () => {
-  console.log(`Server is running on PORT ${port}`);
-});
+app.listen(port, (req, res) => {
+  console.log(`Server running on port ${port}`)
+})
