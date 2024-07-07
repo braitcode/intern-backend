@@ -23,11 +23,6 @@ const productSchema = new Schema(
       trim: true,
       required: true,
     },
-    // category: {
-    //   type: ObjectId,
-    //   ref: "Category",
-    //   required: true,
-    // },
     quantity: {
       type: Number,
     },

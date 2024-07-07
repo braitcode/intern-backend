@@ -39,7 +39,6 @@ export const createProduct = async (req, res) => {
       slug,
       description,
       price,
-      // category,
       quantity,
       images: uploadedImages,
     });
