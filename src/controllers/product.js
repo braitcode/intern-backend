@@ -46,11 +46,6 @@ export const createProduct = async (req, res) => {
 
     await newProduct.save();
 
-    // send email to user
-    // const sub = "New Product Notification"
-    // const msg = `A new product: ${newProduct.name} has been added to our product list`
-    // await sendEmail("brightjohn489@gmail.com", sub, msg)
-
     res.status(201).json({
       success: true,
       message: "Product created successfully",

@@ -14,13 +14,9 @@ router.post('/create', upload.array('images', 5),  createProduct); // working
 router.get("/all", getAllProducts) // working
 router.get("/product/:productId", getOneProduct) // working
 router.get("/slug/:slug", getProductBySlug) // working
-router.delete("/delete/:productId", deleteProduct ) //isLoggedIn, isAdmin, deleteProduct // working
+router.delete("/delete/:productId", deleteProduct ) // working
 router.put("/update/:productId", upload.array('images', 5), updateProduct) // working
-router.post("/search", searchProduct)
-router.get("/related/:productId", relatedProducts)
-
-// payment
-// router.post("/payment", isLoggedIn, processPayment)
-
+router.post("/search", searchProduct) // working
+router.get("/related/:productId", relatedProducts) // working
 
 export default router;
