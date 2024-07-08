@@ -105,11 +105,45 @@ Here is the file structure for my project:
 
   - **`/controllers`:** Controllers define the application's behavior. A controller is a function that is called when a route is matched, and it is responsible for handling the request and sending the response.
 
+  ```javascript
+  import Product from "../models/product.js"
+
+  export const createProduct = async (req, res) => {
+        // logic for creating a new product
+    }
+
+  export const getOneProduct = async (req, res) => {
+        // logic for getting one product
+    }
+
+  export const getProductBySlug = async (req, res) => {
+        // logic for getting one product by slug
+    }
+
+  export const deleteProduct = async (req, res) => {
+        // logic for deleting a product
+    }
+
+  export const getAllProducts = async (req, res) => {
+        // logic for getting all products
+    }
+  export const relatedProducts = async (req, res) => {
+        // logic for getting related products
+    }
+  export const searchProduct = async (req, res) => {
+        // logic to search for a product
+    }
+  export const updateProduct = async (req, res) => {
+        // logic for updating product
+    }
+```
+
+
   - **`/helpers`:** is commonly used to store utility functions and modules that assist with various tasks throughout the application.
 
   - **`/models`:** Models define my data schema and interact with my database. A data model is a representation of the data that will be stored in the database and the relationships between that data. Mongoose was used to define our schema.
 
-```javascript
+    ```javascript
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 const { ObjectId } = Schema;
@@ -134,7 +168,7 @@ const productSchema = new Schema(
     }
     );
 
-export default mongoose.model("Product", productSchema);
+    export default mongoose.model("Product", productSchema);
 ```
 
 
@@ -165,3 +199,115 @@ router.get("/related/:productId", relatedProducts) // working
 
 export default router;
 ```
+
+## Used packages for building this node api project
+
+1. **express**: Express is a web application framework for Node.js that simplifies the process of building robust web applications.
+
+    - **Installation**:
+      Express was installed using npm:
+      ```bash
+      npm install express
+      ```
+
+    - **Usage**:
+      To create an Express application, I started with the following:
+
+      ```javascript
+      import express from "express";
+      const app = express();
+
+      // Define middleware
+      app.use(express.json());
+      // routes
+      app.use("/api/product", productRouter);
+
+      // Start the Express server
+      const port = process.env.PORT || 8000;
+      app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+      });
+      ```
+
+2. **dotenv**: Dotenv is a zero-dependency module that loads environment variables from a `.env` file into `process.env`.
+
+    - **Installation**:
+      Install dotenv using npm:
+      ```bash
+      npm install dotenv
+      ```
+
+    - **Usage**:
+      Create a `.env` file in your project's root directory and add environment variables:
+
+      ```
+      DB_URI=your_mongodb_uri
+      PORT=3000
+      SECRET_KEY=your_secret_key
+      ```
+
+      Then, load the environment variables in your application:
+
+      ```javascript
+      require('dotenv').config();
+      const port = process.env.PORT;
+      const dbUri = process.env.DB_URI;
+      const secretKey = process.env.SECRET_KEY;
+      ```
+
+3. **nodemon**: Nodemon is a utility that automatically restarts your Node.js application when source code changes are detected.
+
+    - **Installation**:
+      Install nodemon globally using npm:
+      ```bash
+      npm install -g nodemon
+      ```
+
+    - **Usage**:
+      Instead of running your Node.js application with `node`, use `nodemon`:
+
+      ```bash
+      nodemon your_app.js
+      ```
+
+      Nodemon will monitor your files for changes and automatically restart the server.
+
+4. **mongoose**: Mongoose is an ODM (Object Data Modeling) library for MongoDB that simplifies interactions with MongoDB.
+
+    - **Installation**:
+      Install mongoose using npm:
+      ```bash
+      npm install mongoose
+      ```
+
+    - **Usage**:
+      Create a connection to MongoDB and define schemas and models for your data. Here's a simplified example:
+
+      ```javascript
+      const mongoose = require('mongoose');
+      mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+      const userSchema = new mongoose.Schema({
+        username: String,
+        email: String,
+        // ...
+      });
+
+      const User = mongoose.model('User', userSchema);
+      ```
+
+5. **cors**: The CORS (Cross-Origin Resource Sharing) package allows you to enable or configure CORS for your Express application.
+
+    - **Installation**:
+      Install cors using npm:
+      ```bash
+      npm install cors
+      ```
+
+    - **Usage**:
+      Add CORS middleware to your Express app:
+
+      ```javascript
+      const cors = require('cors');
+      app.use(cors());
+      ```
