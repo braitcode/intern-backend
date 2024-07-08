@@ -397,9 +397,11 @@ export default router;
 
 **Testing API Endpoints with Postman**
 
-[Postman](https://www.postman.com/) is a great tool for testing your API endpoints. It allows you to send HTTP requests to your server and inspect the responses.
-`
-    - **`/createProduct`:**
+[Postman](https://www.postman.com/) is a great tool for testing your API endpoints. It allows you to send HTTP requests to your server and inspect the responses:
+
+
+- **`/createProduct`:**
+    
     [createProduct](http://localhost:8000/api/product/create?name=bentley&description=this%is%a%luxury%car&quantity=50&price=50000000/)
 
     This is the outcome:
