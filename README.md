@@ -109,12 +109,12 @@ Here is the file structure for my project:
 
   - **`/models`:** Models define my data schema and interact with my database. A data model is a representation of the data that will be stored in the database and the relationships between that data. Mongoose was used to define our schema.
 
-  ```javascript
-  import mongoose from "mongoose";
-    const { Schema } = mongoose;
-    const { ObjectId } = Schema;
+```javascript
+import mongoose from "mongoose";
+const { Schema } = mongoose;
+const { ObjectId } = Schema;
 
-    const productSchema = new Schema(
+const productSchema = new Schema(
   {
     name: {
       type: String,
@@ -134,34 +134,34 @@ Here is the file structure for my project:
     }
     );
 
-    export default mongoose.model("Product", productSchema);
-```javascript
+export default mongoose.model("Product", productSchema);
+```
 
 
 
   - **`/routes`:** This directory holds the route definitions for your application. Routes define the endpoints of our API and specify the HTTP methods (e.g., GET, POST) that can be used to access them.
 
-        ```javascript
-        import express from 'express';
-        import { createProduct, getOneProduct } from '../controllers/product.js';
-        import { getProductBySlug } from '../controllers/product.js';
-        import { deleteProduct } from '../controllers/product.js';
-        import { getAllProducts } from '../controllers/product.js';
-        import { relatedProducts } from '../controllers/product.js';
-        import { searchProduct } from '../controllers/product.js';
-        import { upload } from '../helpers/multer.js';
-        import { updateProduct } from '../controllers/product.js';
+ ```javascript
+import express from 'express';
+import { createProduct, getOneProduct } from '../controllers/product.js';
+import { getProductBySlug } from '../controllers/product.js';
+import { deleteProduct } from '../controllers/product.js';
+import { getAllProducts } from '../controllers/product.js';
+import { relatedProducts } from '../controllers/product.js';
+import { searchProduct } from '../controllers/product.js';
+import { upload } from '../helpers/multer.js';
+import { updateProduct } from '../controllers/product.js';
 
-        const router = express.Router();
+const router = express.Router();
 
-        router.post('/create', upload.array('images', 5),  createProduct); // working
-        router.get("/all", getAllProducts) // working
-        router.get("/product/:productId", getOneProduct) // working
-        router.get("/slug/:slug", getProductBySlug) // working
-        router.delete("/delete/:productId", deleteProduct ) // working
-        router.put("/update/:productId", upload.array('images', 5), updateProduct) // working
-        router.post("/search", searchProduct) // working
-        router.get("/related/:productId", relatedProducts) // working
+router.post('/create', upload.array('images', 5),  createProduct); // working
+router.get("/all", getAllProducts) // working
+router.get("/product/:productId", getOneProduct) // working
+router.get("/slug/:slug", getProductBySlug) // working
+router.delete("/delete/:productId", deleteProduct ) // working
+router.put("/update/:productId", upload.array('images', 5), updateProduct) // working
+router.post("/search", searchProduct) // working
+router.get("/related/:productId", relatedProducts) // working
 
-        export default router;
-    ```javascript
+export default router;
+```
