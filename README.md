@@ -400,11 +400,11 @@ export default router;
 [Postman](https://www.postman.com/) is a great tool for testing your API endpoints. It allows you to send HTTP requests to your server and inspect the responses:
 
 
-- **`/createProduct`:**
+- **`/Create Product`:**
     
     [createProduct](http://localhost:8000/api/product/create?name=bentley&description=this%is%a%luxury%car&quantity=50&price=50000000/)
 
-    This is the outcome:
+    Response:
     
     ```json
     {
@@ -435,4 +435,178 @@ export default router;
        }
     }
     
+- **`/Get One Product`:**
+
+    [getOneProduct](http://localhost:8000/api/product/product/6689b10d054456675df7ae88/)
+
+    Response:
     
+    ```json
+    {
+    "success": true,
+    "message": "Product fetched successfully",
+    "product": {
+        "_id": "6689b10d054456675df7ae88",
+        "name": "Macbook Air M1",
+        "slug": "macbook-air-m1",
+        "description": "Macbook Air M1 is one beast of a laptop that is very fast and delivers well",
+        "price": 1000000,
+        "quantity": 1001,
+        "sold": 0,
+        "isAvailable": true,
+        "shipping": false,
+        "ratings": [],
+        "avgRating": 0,
+        "images": [],
+        "createdAt": "2024-07-06T21:03:09.666Z",
+        "updatedAt": "2024-07-06T21:03:09.666Z",
+        "__v": 0
+        }
+    }
+
+- **`/Get By Slug`:**
+
+    [getBySlug](http://localhost:8000/api/product/slug/macbook-air-m1/)
+    
+    Response:
+    
+    ```json
+    {
+    "success": true,
+    "message": "Product fetched successfully",
+    "product": {
+        "_id": "6689ad6e3595c194d4538831",
+        "name": "Macbook Air M1",
+        "slug": "macbook-air-m1",
+        "description": "Macbook Air M1 is one beast of a laptop that is very fast and delivers well",
+        "price": 1000000,
+        "quantity": 1001,
+        "sold": 0,
+        "isAvailable": true,
+        "shipping": false,
+        "ratings": [],
+        "avgRating": 0,
+        "images": [],
+        "createdAt": "2024-07-06T20:47:42.591Z",
+        "updatedAt": "2024-07-06T20:47:42.591Z",
+        "__v": 0
+        }
+    }
+
+- **`/Delete Product`:**
+
+    [deleteProduct](http://localhost:8000/api/product/delete/6689ad6e3595c194d4538831/)
+
+    Response:
+    
+    ```json
+    {
+    "success": true,
+    "message": "Product deleted successfully",
+    "product": {
+        "acknowledged": true,
+        "deletedCount": 1
+       }
+    }
+
+- **`/Get All Products`:**
+
+    [getAllsProducts](http://localhost:8000/api/product/all/)
+
+    Response:
+    
+    ```json
+    {
+    "success": true,
+    "currentPage": 1,
+    "totalPages": 2,
+    "productCount": 17,
+    "products": [
+        {
+            "_id": "6689a818bbffc51d16e921a3",
+            "name": "Pepsi",
+            "slug": "pepsi",
+            "description": "Pepsi is a good soft drink",
+            "price": 350,
+            "quantity": 30,
+            "sold": 0,
+            "isAvailable": true,
+            "shipping": false,
+            "ratings": [],
+            "avgRating": 0,
+            "images": [],
+            "createdAt": "2024-07-06T20:24:56.504Z",
+            "updatedAt": "2024-07-06T20:24:56.504Z",
+            "__v": 0
+        },
+        {
+            "_id": "6689ac2c3595c194d453882b",
+            "name": "coke",
+            "slug": "coke",
+            "description": "Coke is a good soft drink",
+            "price": 350,
+            "quantity": 31,
+            "sold": 0,
+            "isAvailable": true,
+            "shipping": false,
+            "ratings": [],
+            "avgRating": 0,
+            "images": [],
+            "createdAt": "2024-07-06T20:42:20.367Z",
+            "updatedAt": "2024-07-06T20:42:20.367Z",
+            "__v": 0
+        },
+        {
+            "_id": "6689ac6a3595c194d453882d",
+            "name": "Seven up",
+            "slug": "seven-up",
+            "description": "Seven up is a good soft drink for relaxation",
+            "price": 300,
+            "quantity": 2,
+            "sold": 0,
+            "isAvailable": true,
+            "shipping": false,
+            "ratings": [],
+            "avgRating": 0,
+            "images": [],
+            "createdAt": "2024-07-06T20:43:22.027Z",
+            "updatedAt": "2024-07-06T20:43:22.027Z",
+            "__v": 0
+        },
+        {
+            "_id": "6689ad223595c194d453882f",
+            "name": "Malta Guinness",
+            "slug": "malta-guinness",
+            "description": "Malta Guinness does good to the body",
+            "price": 600,
+            "quantity": 10,
+            "sold": 0,
+            "isAvailable": true,
+            "shipping": false,
+            "ratings": [],
+            "avgRating": 0,
+            "images": [],
+            "createdAt": "2024-07-06T20:46:26.761Z",
+            "updatedAt": "2024-07-06T20:46:26.761Z",
+            "__v": 0
+        },
+        {
+            "_id": "6689b10d054456675df7ae88",
+            "name": "Macbook Air M1 2020",
+            "slug": "macbook-air-m1-2020",
+            "description": "Macbook Air M1 is one beast of a laptop that is very fast and delivers well",
+            "price": 1000000,
+            "quantity": 1005,
+            "sold": 0,
+            "isAvailable": true,
+            "shipping": false,
+            "ratings": [],
+            "avgRating": 0,
+            "images": [],
+            "createdAt": "2024-07-06T21:03:09.666Z",
+            "updatedAt": "2024-07-07T17:21:06.384Z",
+            "__v": 0
+           }
+           // ..........
+       ]
+    }
