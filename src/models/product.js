@@ -53,7 +53,8 @@ const productSchema = new Schema(
     avgRating: {
       type: Number,
       default: 0,
-    }
+    },
+    
 
   },
   { timestamps: true }

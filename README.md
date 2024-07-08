@@ -136,19 +136,19 @@ Here is the file structure for my project:
   export const updateProduct = async (req, res) => {
         // logic for updating product
     }
-```
+  ```
 
     - **`/helpers`:** is commonly used to store utility functions and modules that assist with various tasks throughout the application.
 
     - **`/models`:** Models define my data schema and interact with my database. A data model is a representation of the data that will be stored in the database and the relationships between that data. Mongoose was used to define our schema.
 
     ```javascript
-import mongoose from "mongoose";
-const { Schema } = mongoose;
-const { ObjectId } = Schema;
+    import mongoose from "mongoose";
+    const { Schema } = mongoose;
+    const { ObjectId } = Schema;
 
-const productSchema = new Schema(
-  {
+    const productSchema = new Schema(
+    {
     name: {
       type: String,
       trim: true,
@@ -168,36 +168,34 @@ const productSchema = new Schema(
     );
 
     export default mongoose.model("Product", productSchema);
-```
+    ```
 
+    - **`/routes`:** This directory holds the route definitions for your application. Routes define the endpoints of our API and specify the HTTP methods (e.g., GET, POST) that can be used to access them.
 
+    ```javascript
+    import express from 'express';
+    import { createProduct, getOneProduct } from '../controllers/product.js';
+    import { getProductBySlug } from '../controllers/product.js';
+    import { deleteProduct } from '../controllers/product.js';
+    import { getAllProducts } from '../controllers/product.js';
+    import { relatedProducts } from '../controllers/product.js';
+    import { searchProduct } from '../controllers/product.js';
+    import { upload } from '../helpers/multer.js';
+    import { updateProduct } from '../controllers/product.js';
 
-  - **`/routes`:** This directory holds the route definitions for your application. Routes define the endpoints of our API and specify the HTTP methods (e.g., GET, POST) that can be used to access them.
+    const router = express.Router();
 
- ```javascript
-import express from 'express';
-import { createProduct, getOneProduct } from '../controllers/product.js';
-import { getProductBySlug } from '../controllers/product.js';
-import { deleteProduct } from '../controllers/product.js';
-import { getAllProducts } from '../controllers/product.js';
-import { relatedProducts } from '../controllers/product.js';
-import { searchProduct } from '../controllers/product.js';
-import { upload } from '../helpers/multer.js';
-import { updateProduct } from '../controllers/product.js';
+    router.post('/create', upload.array('images', 5),  createProduct); // working
+    router.get("/all", getAllProducts) // working
+    router.get("/product/:productId", getOneProduct) // working
+    router.get("/slug/:slug", getProductBySlug) // working
+    router.delete("/delete/:productId", deleteProduct ) // working
+    router.put("/update/:productId", upload.array('images', 5), updateProduct) // working
+    router.post("/search", searchProduct) // working
+    router.get("/related/:productId", relatedProducts) // working
 
-const router = express.Router();
-
-router.post('/create', upload.array('images', 5),  createProduct); // working
-router.get("/all", getAllProducts) // working
-router.get("/product/:productId", getOneProduct) // working
-router.get("/slug/:slug", getProductBySlug) // working
-router.delete("/delete/:productId", deleteProduct ) // working
-router.put("/update/:productId", upload.array('images', 5), updateProduct) // working
-router.post("/search", searchProduct) // working
-router.get("/related/:productId", relatedProducts) // working
-
-export default router;
-```
+    export default router;
+    ```
 
 ## Used packages for building this node api project
 
@@ -511,7 +509,7 @@ export default router;
 
 - **`/Get All Products`:**
 
-    [getAllsProducts](http://localhost:8000/api/product/all/)
+    [getAllProducts](http://localhost:8000/api/product/all/)
 
     Response:
     
@@ -610,3 +608,172 @@ export default router;
            // ..........
        ]
     }
+
+- **`/Update Product`:**
+
+    [updateProduct](http://localhost:8000/api/product/update/668ae1dae587557329f27da2/)
+
+    Response:
+
+    ```json
+    {
+    "success": true,
+    "message": "Product updated successfully",
+    "product": {
+        "_id": "668ae1dae587557329f27da2",
+        "name": "Iphone 11 pro",
+        "slug": "iphone-11-pro",
+        "description": "The iPhone 11 Pro, released by Apple in September 2019, is part of the iPhone 11 series. It features a 5.8-inch Super Retina XDR OLED display, offering vibrant colors and high contrast. Powered by the A13 Bionic chip, it delivers fast performance and efficiency. The device includes a triple-camera system with 12MP ultra-wide, wide, and telephoto lenses, providing versatile photography options and improved low-light capabilities with Night mode.",
+        "price": 400000,
+        "quantity": 400,
+        "sold": 0,
+        "images": [
+            {
+                "url": "https://res.cloudinary.com/dww4lgcy9/image/upload/v1720378751/b13ylszjjjzpkko8zahq.jpg",
+                "imagePublicId": "b13ylszjjjzpkko8zahq",
+                "_id": "668ae57fbd27c9b5c6e5f87d"
+            }
+        ],
+        "isAvailable": true,
+        "shipping": false,
+        "ratings": [],
+        "avgRating": 0,
+        "createdAt": "2024-07-07T18:43:38.659Z",
+        "updatedAt": "2024-07-07T18:59:11.352Z",
+        "__v": 1
+       }
+    }
+
+- **`/Search Product`:**
+
+    [searchProduct](http://localhost:8000/api/product/search?term=coke/)
+
+    Response:
+
+    ```json
+    {
+    "success": true,
+    "currentPage": 1,
+    "productsFound": 1,
+    "totalPages": 1,
+    "products": [
+        {
+            "_id": "6689ac2c3595c194d453882b",
+            "name": "coke",
+            "slug": "coke",
+            "description": "Coke is a good soft drink",
+            "price": 350,
+            "quantity": 31,
+            "sold": 0,
+            "isAvailable": true,
+            "shipping": false,
+            "ratings": [],
+            "avgRating": 0,
+            "images": [],
+            "createdAt": "2024-07-06T20:42:20.367Z",
+            "updatedAt": "2024-07-06T20:42:20.367Z",
+            "__v": 0
+           }
+        ]
+    }
+
+- **`/Related Products`:**
+
+    [getRelatedProducts](http://localhost:8000/api/product/related/6689a818bbffc51d16e921a3/)
+
+    Response:
+
+    ```json
+    {
+    "success": true,
+    "relatedProducts": [
+        {
+            "_id": "6689a83dbbffc51d16e921a5",
+            "name": "Pepsi",
+            "slug": "pepsi",
+            "description": "Pepsi is a good soft drink",
+            "price": 350,
+            "quantity": 30,
+            "sold": 0,
+            "isAvailable": true,
+            "shipping": false,
+            "ratings": [],
+            "avgRating": 0,
+            "images": [],
+            "createdAt": "2024-07-06T20:25:33.359Z",
+            "updatedAt": "2024-07-06T20:25:33.359Z",
+            "__v": 0
+        },
+        {
+            "_id": "6689a8a7bbffc51d16e921a7",
+            "name": "Pepsi",
+            "slug": "pepsi",
+            "description": "Pepsi is a good soft drink",
+            "price": 350,
+            "quantity": 30,
+            "sold": 0,
+            "isAvailable": true,
+            "shipping": false,
+            "ratings": [],
+            "avgRating": 0,
+            "images": [],
+            "createdAt": "2024-07-06T20:27:19.728Z",
+            "updatedAt": "2024-07-06T20:27:19.728Z",
+            "__v": 0
+        },
+        {
+            "_id": "6689a9d4bbffc51d16e921a9",
+            "name": "Pepsi",
+            "slug": "pepsi",
+            "description": "Pepsi is a good soft drink",
+            "price": 350,
+            "quantity": 30,
+            "sold": 0,
+            "isAvailable": true,
+            "shipping": false,
+            "ratings": [],
+            "avgRating": 0,
+            "images": [],
+            "createdAt": "2024-07-06T20:32:20.635Z",
+            "updatedAt": "2024-07-06T20:32:20.635Z",
+            "__v": 0
+        },
+        {
+            "_id": "6689aa913c629cae0be48b85",
+            "name": "Pepsi",
+            "slug": "pepsi",
+            "description": "Pepsi is a good soft drink",
+            "price": 350,
+            "quantity": 30,
+            "sold": 0,
+            "isAvailable": true,
+            "shipping": false,
+            "ratings": [],
+            "avgRating": 0,
+            "images": [],
+            "createdAt": "2024-07-06T20:35:29.489Z",
+            "updatedAt": "2024-07-06T20:35:29.489Z",
+            "__v": 0
+        },
+        {
+            "_id": "6689abd13595c194d4538828",
+            "name": "Pepsi",
+            "slug": "pepsi",
+            "description": "Pepsi is a good soft drink",
+            "price": 350,
+            "quantity": 30,
+            "sold": 0,
+            "isAvailable": true,
+            "shipping": false,
+            "ratings": [],
+            "avgRating": 0,
+            "images": [],
+            "createdAt": "2024-07-06T20:40:49.033Z",
+            "updatedAt": "2024-07-06T20:40:49.033Z",
+            "__v": 0
+          }
+      ]
+    }
+    
+
+**Coded by @braitcode**

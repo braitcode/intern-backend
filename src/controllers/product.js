@@ -132,59 +132,63 @@ export const getAllProducts = async (req, res) => {
         const { productId } = req.params;
         const product = await Product.findById(productId);
 
-        if(!product) {
-            res.status(404).json({success: false, message: "Product not found"})
+        if (!product) {
+            return res.status(404).json({ success: false, message: "Product not found" });
         }
-        res.status(200).json({ success: true, relatedProducts })
+
+        // Find related products by tags, excluding the current product
+        const relatedProducts = await Product.find({
+            _id: { $ne: productId },
+            $or: [
+                // { tags: { $in: product.tags } },
+                { name: new RegExp(product.name, 'i') },
+                { description: new RegExp(product.description, 'i') }
+            ]
+        }).limit(10);
+
+        res.status(200).json({ success: true, relatedProducts });
     } catch (err) {
         console.log("Error fetching related products:", err.message);
-        res.status(500).json({success: false, message: "Failed to fetch related products", error: err.message})
+        res.status(500).json({ success: false, message: "Failed to fetch related products", error: err.message });
     }
-  }
+};
 
 // search products with pagination
 export const searchProduct = async (req, res) => {
-    const { term } = req.query;
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
+  const { term } = req.query;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
 
-    try {
-        const searchRegex = new RegExp(term, 'i');
-        const products = await Product.find({
-            $and: [
-                { isAvailable: true },
-                {
-                    $or: [
-                        { name: searchRegex },
-                        { description: searchRegex },
-                    ]
-                }
-            ]
-        }).skip(skip).limit(limit);
+  if (!term) {
+      return res.status(400).json({ success: false, message: 'Search term is required' });
+  }
 
-        const totalProducts = await Product.countDocuments({
-            $and: [
-                { isAvailable: true },
-                {
-                    $or: [
-                        { name: searchRegex },
-                        { description: searchRegex },
-                    ]
-                }
-            ]
-        })
-        res.json({
-            currentPage: page,
-            productsFound: totalProducts,
-            totalPages: Math.ceil(totalProducts / limit),
-            products,
-        })
-    } catch (error) {
-        console.log('Error searching products:', error);
-        res.status(500).json({ success: false, message: 'Failed to search products', errMsg: error.message });
-    }
-}
+  try {
+      const searchRegex = new RegExp(term, 'i');
+      const query = {
+          isAvailable: true,
+          $or: [
+              { name: searchRegex },
+              { description: searchRegex },
+          ],
+      };
+
+      const products = await Product.find(query).skip(skip).limit(limit);
+      const totalProducts = await Product.countDocuments(query);
+
+      res.json({
+          success: true,
+          currentPage: page,
+          productsFound: totalProducts,
+          totalPages: Math.ceil(totalProducts / limit),
+          products,
+      });
+  } catch (error) {
+      console.log('Error searching products:', error);
+      res.status(500).json({ success: false, message: 'Failed to search products', errMsg: error.message });
+  }
+};
 
 // update products
 export const updateProduct = async (req, res) => {
