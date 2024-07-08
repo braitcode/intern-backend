@@ -138,10 +138,9 @@ Here is the file structure for my project:
     }
 ```
 
+    - **`/helpers`:** is commonly used to store utility functions and modules that assist with various tasks throughout the application.
 
-  - **`/helpers`:** is commonly used to store utility functions and modules that assist with various tasks throughout the application.
-
-  - **`/models`:** Models define my data schema and interact with my database. A data model is a representation of the data that will be stored in the database and the relationships between that data. Mongoose was used to define our schema.
+    - **`/models`:** Models define my data schema and interact with my database. A data model is a representation of the data that will be stored in the database and the relationships between that data. Mongoose was used to define our schema.
 
     ```javascript
 import mongoose from "mongoose";
@@ -241,38 +240,38 @@ export default router;
       Create a `.env` file in your project's root directory and add environment variables:
 
       ```
-      DB_URI=your_mongodb_uri
-      PORT=3000
-      SECRET_KEY=your_secret_key
+        PORT=8000
+        MONGODB_URL=mongodb://localhost/mydb
+        password=mysecret
       ```
 
       Then, load the environment variables in your application:
 
       ```javascript
-      require('dotenv').config();
-      const port = process.env.PORT;
-      const dbUri = process.env.DB_URI;
-      const secretKey = process.env.SECRET_KEY;
+        dotenv.config();
+        const port = process.env.PORT || 8000;
+        const dbUrl = process.env.MONGODB_URL;
+        
       ```
 
-3. **nodemon**: Nodemon is a utility that automatically restarts your Node.js application when source code changes are detected.
+3. **Nodemon**: Nodemon is a utility that automatically restarts your Node.js application when source code changes are detected.
 
     - **Installation**:
       Install nodemon globally using npm:
       ```bash
-      npm install -g nodemon
+      npm install nodemon
       ```
 
     - **Usage**:
-      Instead of running your Node.js application with `node`, use `nodemon`:
+      Instead of running my Node.js application with `node` from time to time while building the project, I used `nodemon`:
 
       ```bash
       nodemon your_app.js
       ```
 
-      Nodemon will monitor your files for changes and automatically restart the server.
+      Nodemon will monitor my files for changes and automatically restart the server.
 
-4. **mongoose**: Mongoose is an ODM (Object Data Modeling) library for MongoDB that simplifies interactions with MongoDB.
+4. **Mongoose**: Mongoose is an ODM (Object Data Modeling) library for MongoDB that simplifies interactions with MongoDB.
 
     - **Installation**:
       Install mongoose using npm:
@@ -281,22 +280,34 @@ export default router;
       ```
 
     - **Usage**:
-      Create a connection to MongoDB and define schemas and models for your data. Here's a simplified example:
+      Create a connection to MongoDB and define schemas and models for your data.
 
       ```javascript
-      const mongoose = require('mongoose');
-      mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+      import mongoose from "mongoose";
+        export const connectDB = (url) => {
+        mongoose
+        .connect(url).then(() => console.log('Connected to MongoDB'))
+        .catch((err) => console.log('Error connecting to MongoDB', err.message))
+        }
 
-      const userSchema = new mongoose.Schema({
-        username: String,
-        email: String,
+      const productSchema = new Schema({
+        name: {
+        type: String,
+        trim: true,
+        required: true,
+        maxlength: 160,
+        },
+        slug: {
+        type: String,
+        lowercase: true,
+        },
         // ...
       });
 
-      const User = mongoose.model('User', userSchema);
+      export default mongoose.model("Product", productSchema);
       ```
 
-5. **cors**: The CORS (Cross-Origin Resource Sharing) package allows you to enable or configure CORS for your Express application.
+5. **Cors**: The CORS (Cross-Origin Resource Sharing) package allows you to enable or configure CORS for your Express application.
 
     - **Installation**:
       Install cors using npm:
@@ -308,6 +319,118 @@ export default router;
       Add CORS middleware to your Express app:
 
       ```javascript
-      const cors = require('cors');
+      import cors from "cors"
       app.use(cors());
       ```
+
+6. **Cloudinary**: Cloudinary is a cloud-based service for managing and delivering media assets. It's often used for image and video upload, storage, and manipulation.
+
+    - **Installation**:
+      I installed the Cloudinary package using npm:
+      ```bash
+      npm install cloudinary
+      ```
+
+    - **Usage**:
+      To use Cloudinary in this application, I obtained my API  credentials from my cloudinary account. Here's a basic example of how to upload an image to Cloudinary:
+
+      ```javascript
+      import { v2 as cloudinary } from 'cloudinary';
+      dotenv.config();
+
+      cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+      });
+
+7. **multer-storage-cloudinary**: multer-storage-cloudinary is a
+    storage engine for multer that allows you to upload files directly
+    to Cloudinary, a cloud-based image and video management service. It directly uploads to cloudinary.
+
+    - **Installation**:
+    I installed the multer-storage-cloudinary using npm:
+    ```bash
+    npm install multer-storage-cloudinary
+    ```
+
+    - **Usage**:
+      To use multer-storage-cloudinary in this application, I created a multer.js file inside the helpers folder. Below is the code:
+
+      ```javascript
+      import multer from "multer";
+      import { CloudinaryStorage } from "multer-storage-cloudinary";
+
+      dotenv.config();
+
+      const storage = new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: {
+          allowedFormats: ['jpg', 'png', 'gif', 'jpeg', 'svg'],
+          transformation:[
+              {width: 300, height:300, crop: 'fill', gravity: 'face', quality: 'auto'}
+            ]
+          }
+        })
+      export const upload = multer({storage: storage})
+      ```
+
+8. **slugify**: Slugs are typically used in URLs to create readable,
+    SEO-friendly links. The slugify package ensures that the resulting slugs are lowercase, contain only URL-safe characters, and replace spaces and special characters with hyphens.
+
+    - **Installation**:
+    I installed the slugify using npm:
+    ```bash
+    npm install slugify
+    ```
+
+    - **Usage**:I imported slugify and used it in the controller function when creating a post. See blelow:
+
+    ```javascript
+    import slugify from "slugify"
+
+    export const createProduct = async (req, res) => {
+        // logic for creating a new product
+
+        const slug = slugify(name);
+    };
+
+**Testing API Endpoints with Postman**
+
+[Postman](https://www.postman.com/) is a great tool for testing your API endpoints. It allows you to send HTTP requests to your server and inspect the responses.
+`
+    - **`/createProduct`:**
+    [createProduct](http://localhost:8000/api/product/create?name=bentley&description=this is a luxury car&quantity=50&price=50000000)
+
+    This is the outcome:
+    
+    ```json
+    {
+    "success": true,
+    "message": "Product created successfully",
+    "product": {
+        "name": "Nissan GT",
+        "slug": "nissan-gt",
+        "description": "this is a beautiful luxury car for classy youths",
+        "price": 6000000,
+        "quantity": 300,
+        "sold": 0,
+        "images": [
+            {
+                "url": "https://res.cloudinary.com/dww4lgcy9/image/upload/v1720385276/zedcorga9b2tjeycloxr.webp",
+                "imagePublicId": "zedcorga9b2tjeycloxr",
+                "_id": "668afefc693234f17754e1ba"
+            }
+        ],
+        "isAvailable": true,
+        "shipping": false,
+        "ratings": [],
+        "avgRating": 0,
+        "_id": "668afefc693234f17754e1b9",
+        "createdAt": "2024-07-07T20:47:56.503Z",
+        "updatedAt": "2024-07-07T20:47:56.503Z",
+        "__v": 0
+       }
+    }
+    
+    
