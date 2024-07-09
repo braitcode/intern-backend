@@ -23,7 +23,10 @@ let corsOptions = {
 } 
 app.use(cors(corsOptions));
 
-
+// Root route
+app.get('/', (req, res) => {
+  res.send('Welcome to my API');
+});
 
 // routers
 app.use("/api/product", productRouter);
